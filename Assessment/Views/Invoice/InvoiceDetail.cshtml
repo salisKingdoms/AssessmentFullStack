@@ -1,0 +1,666 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Invoice Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Wrapper -->
+<div id="content-wrapper" class="d-flex flex-column">
+
+    <!-- Main Content -->
+    <div id="content">
+        <!-- Begin Page Content -->
+        <div class="container-fluid" id="formDetail">
+
+            <div class="card shadow mb-4">
+                <div class="card-header ">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        Invoice
+
+                    </h6>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div id="alert_container" runat="server">
+                            <asp:Label ID="lblError" runat="server" Text=""></asp:Label>
+                        </div>
+                    </div>
+
+                    <div class="form-horizontal">
+                        <div class="form-group row" runat="server">
+                            <label class="col-md-2 control-label">Invoice No</label>
+                            <div class="input-group col-md-6" data-target-input="nearest">
+                                <input type="text" class="form-control" id="txtInvNo" placeholder="e.g. INV-00001/2024/01/26" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-horizontal">
+                        <div class="form-group row" runat="server">
+                            <label class="col-md-2 control-label"></label>
+
+                            <div class="input-group col-md-6" id="ActionButton" data-target-input="nearest">
+                                <div class="col-md-12" runat="server" style="padding-left:0">
+                                    <a id="btnSearch" href="javascript:void(0)" class="btn btn-sm btn-info" onclick="searchInvoice()">Search</a>
+                                    <a id="btnReset" href="javascript:void(0)" class="btn btn-sm btn-warning" onclick="resetForm()"><em class="fas fa-times"></em> Reset</a>
+                                    <a id="btnAddNew" href="javascript:void(0)" class="btn btn-sm btn-success" onclick="newForm()"><em class="fas fa-plus"></em> Add New</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="formCrud" style="display:none">
+                <div class="card shadow mb-4" id="formHeaderInvoice">
+                    <div class="card-header ">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            Invoice
+                        </h6>
+                    </div>
+                    <div class="card-body" id="bodyTemplateUser">
+                        <div id="alert_container" runat="server">
+                            <asp:Label ID="lblError" runat="server" Text=""></asp:Label>
+                        </div>
+                        <div class="form-horizontal">
+                            <div class="form-group row" runat="server">
+                                <label class="col-md-2 control-label">Invoice Date<span class="badge field-required">*</span></label>
+                                <div class="input-group date col-md-3" id="datePickerTo" data-target-input="nearest">
+                                    <input type="text" class="form-control datetimepicker-input" id="InvDate" data-target="#datePickerTo" />
+                                    <div class="input-group-append" data-target="#datePickerTo" data-toggle="datetimepicker">
+                                        <div id="dvInvDate" class="input-group-text btn btn-info"><em class="fa fa-calendar"></em></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-horizontal">
+                            <div class="form-group row" runat="server">
+                                <label class="col-md-2 control-label">To </label>
+                                <div class="input-group date col-md-4" data-target-input="nearest" style="min-height:10%">
+                                    <textarea id="txtTo" class="w-100"></textarea>
+                                </div>
+
+                                <label class="col-md-2 control-label">Ship To </label>
+                                <div class="input-group date col-md-4" data-target-input="nearest" style="min-height:10%">
+                                    <textarea id="txtShipTo" class="w-100"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-horizontal">
+                            <div class="form-group row" runat="server">
+                                <label class="col-md-2 control-label">Sales Name </label>
+                                <div class="input-group date col-md-4" data-target-input="nearest">
+                                    <select id="typeSales" class="form-control sprites-arrow-down" name="TaskFitToWork" onchange="getSales();">
+                                    </select>
+                                </div>
+
+                                <label class="col-md-2 control-label">Payment Type </label>
+                                <div class="input-group date col-md-4" data-target-input="nearest">
+                                    <select id="typePayment" class="form-control sprites-arrow-down" name="TaskFitToWork" onchange="getPayment();">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-horizontal">
+                            <div class="form-group row" runat="server">
+                                <label class="col-md-2 control-label">Courier </label>
+                                <div class="input-group date col-md-4" data-target-input="nearest">
+                                    <select id="typeCourier" class="form-control sprites-arrow-down" name="TaskFitToWork" onchange="getCourier();">
+                                    </select>
+                                </div>
+
+                                <label class="col-md-2 control-label">       </label>
+                                <div class="input-group date col-md-4" data-target-input="nearest">
+                                    <a id="btnAdd" href="javascript:void(0)" class="btn btn-sm btn-success" onclick="addDataDetail()" style="text-justify:auto"><em class="fa fa-plus"></em> New Detail</a>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="card shadow mb-4" id="formDetailInvoice" style="display:none">
+                    <div class="card-header ">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            Detail Invoice
+                        </h6>
+                    </div>
+                    <div class="card-body" id="bodyTemplateUser">
+                        <div id="alert_container" runat="server">
+                            <asp:Label ID="lblError" runat="server" Text=""></asp:Label>
+                        </div>
+                        <div class="form-horizontal">
+                            <div class="form-group row" runat="server">
+                                <label class="col-md-2 control-label">Product </label>
+                                <div class="input-group date col-md-4" data-target-input="nearest">
+                                    <select id="typeProduct" class="form-control sprites-arrow-down" name="TaskFitToWork" onchange="productChange();" value>
+                                    </select>
+                                    <input type="text" id="txtProdName" style="display:none" />
+                                    <input type="text" id="txtProdID" style="display:none" />
+                                </div>
+
+                                <label class="col-md-2 control-label">Weight(kg) </label>
+                                <div class="input-group date col-md-4" data-target-input="nearest">
+                                    <input type="number" id="txtWeight" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-horizontal">
+                            <div class="form-group row" runat="server">
+                                <label class="col-md-2 control-label">Unit Price </label>
+                                <div class="input-group date col-md-4" data-target-input="nearest">
+                                    <input type="number" id="txtPrice" class="form-control" />
+                                </div>
+
+                                <label class="col-md-2 control-label">Qty </label>
+                                <div class="input-group date col-md-4" data-target-input="nearest">
+                                    <input type="number" id="txtqty" class="form-control" onkeyup="calculateTotal()" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-horizontal">
+                            <div class="form-group row" runat="server">
+                                <label class="col-md-2 control-label">Total </label>
+                                <div class="input-group date col-md-4" data-target-input="nearest">
+                                    <input type="number" id="txtTotal" class="form-control" disabled />
+                                </div>
+
+                                <div class="input-group col-md-3" id="ActionButton" data-target-input="nearest">
+                                    <div class="col-md-12" runat="server" style="padding-left:0">
+                                        <a id="btnAdd" href="javascript:void(0)" class="btn btn-success" onclick="addDetail()">Add</a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            List Item Invoice
+                        </h6>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="table-responsive ">
+                            <table class="table table-bordered " id="listData" width="100%" cellspacing="0">
+                                <caption>Data ItemList</caption>
+                                <thead>
+                                    <tr>
+                                        <th class="headerBg" style="width:8%">
+                                            Item
+                                        </th>
+                                        <th class="headerBg" style="width:3%">
+                                            Weight(Kg)
+                                        </th>
+                                        <th class="headerBg" style="width:3%">
+                                            Qty
+                                        </th>
+                                        <th class="headerBg" style="width:5%">
+                                            Unit Price
+                                        </th>
+                                        <th class="headerBg" style="width:7%">
+                                            Total
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="form-horizontal">
+                            <div class="d-flex justify-content-center">
+                                <div class="row" runat="server">
+                                    <button id="btnSubmit" class="btn btn-success" onclick="saveData('Save')"><em class="fa fa-paper-plane"></em> Save</button>
+                                    &nbsp;
+                                    <button id="btnClose" class="btn btn-dark" onclick="showCloseModal()"><em class="fa fa-times-circle"></em> Close</button>
+                                    &nbsp;
+                                    <button id="btnDelet" class="btn btn-danger" onclick="showDeleteModal()"><em class="fa fa-trash"></em> Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+            </div>
+        </div>
+
+        @*Modal Delete Confirmation*@
+        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Are you sure to Delete?</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">Select "Delete" below if you are sure to delete your transaction.</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal" onclick="closeModal()">No</button>
+                        <a class="btn btn-primary" onclick="deleteChoosen()">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of Main Content -->
+    </div>
+
+    <a class="scroll-to-top rounded" href="#page-top">
+        <em class="fas fa-angle-up"></em>
+    </a>
+    <script>
+        var dataCmb, cmbPayment, cmbCourier, cmbProduct;
+        var productChoosen = {}; var oldValueDetails = []; var detailforUp = [];
+        $(document).ready(function () {
+
+            $('#datePickerTo').datetimepicker
+                ({
+                    format: 'YYYY-MM-DD'
+                });
+            var table = $('#listData').DataTable();
+
+
+        })
+
+        function searchInvoice() {
+            $('#loadingPanel').css('display', 'block');
+
+            loadSales(false, "");
+            loadPayment(false, "");
+            loadCourier(false, "");
+            loadProduct(false, "");
+            loadDataInvoice();
+
+        }
+
+        function addDataDetail() {
+            $('#formDetailInvoice').css('display', 'block');
+        }
+
+        function resetForm() {
+            $('#formCrud').css('display', 'none');
+            $("#typeSales").empty();
+            $("#typePayment").empty();
+            $("#typeCourier").empty();
+            $('#loadingPanel').css('display', 'none');
+            $('#txtInvNo').value = "";
+            $('#InvDate').value = "";
+            $('#txtTo').value = "";
+            $('#txtShipTo').value = "";
+            var table = $('#listData').DataTable();
+            table.rows(':gt(0)').remove().draw();
+        }
+
+        function showCloseModal() {
+            $('#formCrud').css('display', 'none');
+            $("#typeSales").empty();
+            $("#typePayment").empty();
+            $("#typeCourier").empty();
+            $('#loadingPanel').css('display', 'none');
+            $('#txtInvNo').value = "";
+            $('#InvDate').value = "";
+            $('#txtTo').value = "";
+            $('#txtShipTo').value = "";
+            var table = $('#listData').DataTable();
+            table.rows(':gt(0)').remove().draw();
+        }
+
+        function newForm() {
+            $('#formCrud').css('display', 'block');
+            $("#typeSales").empty();
+            $("#typePayment").empty();
+            $("#typeCourier").empty();
+            $('#loadingPanel').css('display', 'block');
+            $('#txtInvNo').value = "";
+            $('#InvDate').value = "";
+            $('#txtTo').value = "";
+            $('#txtShipTo').value = "";
+            loadSales(false, "");
+            loadPayment(false, "");
+            loadCourier(false, "");
+            loadProduct(false, "");
+            var table = $('#listData').DataTable();
+            table.rows(':gt(0)').remove().draw();
+            $('#loadingPanel').css('display', 'none');
+        }
+
+        function loadSales(isEdit, obj) {
+            $.ajax({
+                type: "GET",
+                url: "/Invoice/GetSalesList",
+                //data: paramData,
+                //async: false,
+                success: function (response) {
+                    dataCmb = null;
+                    dataCmb = JSON.parse(response);
+                    if (!dataCmb.is_ok) {
+                        $("#typeSales").empty();
+                        toastr.error(dataCmb.message);
+                        setTimeout(function () {
+                            window.top.close();
+                        }, 5000);
+                    }
+                    else {
+                        $("#typeSales").empty();
+
+
+                        $("#typeSales").append($("<option></option>").val(this['']).html('-Select Sales-'));
+                        $.each(dataCmb.data, function () {
+                            $("#typeSales").append($("<option></option>").val(this['SalesID']).html(this['SalesName']));
+                        });
+
+
+                    }
+                }
+            });
+        }
+
+        function loadPayment(isEdit, obj) {
+            $.ajax({
+                type: "GET",
+                url: "/Invoice/GetPaymentList",
+                success: function (response) {
+                    cmbPayment = null;
+                    cmbPayment = JSON.parse(response);
+                    if (!cmbPayment.is_ok) {
+                        $("#typePayment").empty();
+                        toastr.error(cmbPayment.message);
+                        setTimeout(function () {
+                            window.top.close();
+                        }, 5000);
+                    }
+                    else {
+                        $("#typePayment").empty();
+
+
+                        $("#typePayment").append($("<option></option>").val(this['']).html('-Select Payment-'));
+                        $.each(cmbPayment.data, function () {
+                            $("#typePayment").append($("<option></option>").val(this['PaymentID']).html(this['PaymentName']));
+                        });
+
+
+                    }
+                }
+            });
+        }
+
+        function loadCourier(isEdit, obj) {
+            $.ajax({
+                type: "GET",
+                url: "/Invoice/GetCourierList",
+                success: function (response) {
+                    cmbCourier = null;
+                    cmbCourier = JSON.parse(response);
+                    if (!cmbCourier.is_ok) {
+                        $("#typeCourier").empty();
+                        toastr.error(cmbCourier.message);
+                        setTimeout(function () {
+                            window.top.close();
+                        }, 5000);
+                    }
+                    else {
+                        $("#typeCourier").empty();
+
+
+                        $("#typeCourier").append($("<option></option>").val(this['']).html('-Select Courier-'));
+                        $.each(cmbCourier.data, function () {
+                            $("#typeCourier").append($("<option></option>").val(this['CourierID']).html(this['CourierName']));
+                        });
+
+
+                    }
+                }
+            });
+        }
+
+        function loadProduct(isEdit, obj) {
+            $.ajax({
+                type: "GET",
+                url: "/Invoice/GetProductList",
+                success: function (response) {
+                    cmbProduct = null;
+                    cmbProduct = JSON.parse(response);
+                    if (!cmbProduct.is_ok) {
+                        $("#typeProduct").empty();
+                        toastr.error(cmbProduct.message);
+                        setTimeout(function () {
+                            window.top.close();
+                        }, 5000);
+                    }
+                    else {
+                        $("#typeProduct").empty();
+
+
+                        $("#typeProduct").append($("<option></option>").val(this['']).html('-Select Product-'));
+                        $.each(cmbProduct.data, function () {
+                            $("#typeProduct").append($("<option></option>").val(this['ProductID']).html(this['ProductName']));
+                        });
+
+
+                    }
+                }
+            });
+        }
+
+        function addDetail(obj, id) {
+
+            $('#formDetailInvoice').css('display', 'none');
+
+            var itemName = "", weight = 0, qty = 0, unitPrice = 0, total = 0;
+
+            var dataValue = {
+                itemID: $('#typeProduct').val(),
+                ItemName: $('#txtProdName').val(),
+                weight: parseInt($('#txtWeight').val()),
+                qty: parseInt($('#txtqty').val()),
+                unitPrice: parseFloat($('#txtPrice').val()),
+                total: parseFloat($('#txtPrice').val()) * parseInt($('#txtqty').val())
+            };
+            console.log(dataValue);
+            var dataTable = [];
+            dataTable.push(dataValue);
+
+            if (dataTable != null) {
+
+                $("#listData").append(
+                    $("<tr>" + '<td style="text-align: center;display:none">' + dataValue.itemID + "</td>" + '<td style="text-align: center;">' + dataValue.ItemName +
+                        "</td>" + '<td style="text-align: center;">' + dataValue.weight + "</td>"
+                        + '<td style="text-align: center;">' + dataValue.qty + "</td>"
+                        + '<td style="text-align: center;">' + dataValue.unitPrice + "</td>"
+                        + '<td style="text-align: center;">' + dataValue.total + "</td>" + "</tr>"));
+
+            }
+
+        }
+
+        function productChange() {
+            var prodSelect = $('#typeProduct').find(':selected').text();
+            $('#txtProdName').val(prodSelect);
+            $('#txtProdID').val($('#typeProduct').val());
+
+        }
+
+        function calculateTotal() {
+            var qty = parseFloat($('#txtqty').val());
+            var price = parseFloat($('#txtPrice').val());
+            var totals = qty * price;
+            $('#txtTotal').val(totals);
+            console.log(totals);
+        }
+
+        function saveData() {
+
+            SetToObject();
+            var invNo = "";
+            if ($('#txtInvNo').val() !=""){
+                invNo = $('#txtInvNo').val();
+            }
+            var dataHeader = {
+                InvoiceNo: invNo,
+                InvoiceDate: $('#InvDate').val(),
+                InvoiceTo: $('#txtTo').val(),
+                ShipTo: $('#txtShipTo').val(),
+                SalesID: parseInt($('#typeSales').val()),
+                CourierID: parseInt($('#typeCourier').val()),
+                PaymentType: parseInt($('#typePayment').val()),
+                CourierFee: 0,
+                dataDetail: detailforUp
+            };
+            $.ajax({
+                type: "POST",
+                url: "/Invoice/SubmitInvoice",
+                data: dataHeader,
+                success: function (respon) {
+                    if (respon.is_ok) {
+
+                        toastr.success("Invoice success to submitted");
+                        setTimeout(() => {
+                            $('#formCrud').css('display', 'none');
+                        }, 500);
+                    }
+                    else {
+                        console.log("Invoice failed to submitted");
+                        toastr.error("Invoice failed to submitted");
+
+                    }
+                }
+
+            });
+        }
+
+        function SetToObject() {
+            if (oldValueDetails.length > 0) {
+                oldValueDetails.length = 0;
+            }
+
+            $("#listData tr").each(function () {
+                if (!this.rowIndex) return;
+                var self = $(this);
+                var itemID = parseInt(self.find("td:eq(0)").text());
+                var itemname = self.find("td:eq(1)").text().trim();
+                var weight = parseFloat(self.find("td:eq(2)").text());
+                var qty = parseFloat(self.find("td:eq(3)").text());
+                var price = parseFloat(self.find("td:eq(4)").text());
+                var total = parseFloat(self.find("td:eq(5)").text());
+
+                oldValueDetails.push({ ProductID: itemID, prodName: itemname, Weight: weight, Qty: qty, Price: price, Total: total });
+                detailforUp.push({ InvoiceNo: "", ProductID: itemID, Weight: weight, Qty: qty, Price: price });
+            });
+
+            console.log(oldValueDetails);
+        }
+
+        function loadDataInvoice() {
+            oldValueDetails = [];
+            detailforUp = [];
+            var dataHeader = {
+                InvoiceNo: $('#txtInvNo').val()
+            };
+
+            var table = $('#listData').DataTable();
+            table.rows(':gt(0)').remove().draw();
+            //$('#listData').DataTable().destroy();
+            //$('#listData').css('width', '100%');
+
+            $.ajax({
+                type: "GET",
+                url: "/Invoice/ReadInvoice",
+                data: dataHeader,
+                success: function (respon) {
+                    var dataresp = JSON.parse(respon);
+                    if (dataresp.is_ok) {
+                        $('#txtInvNo').val(dataresp.InvoiceNo);
+                        $('#InvDate').val(moment(dataresp.InvoiceDate).format('YYYY-MM-DD'));
+                        $('#txtTo').val(dataresp.InvoiceTo);
+                        $('#txtShipTo').val(dataresp.ShipTo);
+                        $('#typeSales').val(dataresp.SalesID).trigger('change.select2');
+                        getSales();
+                        $('#typeCourier').val(dataresp.CourierID).trigger('change.select2');
+                        getCourier();
+                        $('#typePayment').val(dataresp.PaymentType).trigger('change.select2');
+                        getPayment();
+                        if (dataresp.dataDetail != null) {
+                            $.each(dataresp.dataDetail, function (i, item) {
+                                $("#listData").append(
+                                    $("<tr>" + '<td style="text-align: center;display:none">' + item.ProductID + "</td>" +
+                                        '<td style="text-align: center;">' + item.ProductName +
+                                        "</td>" + '<td style="text-align: center;">' + item.Weight + "</td>"
+                                        + '<td style="text-align: center;">' + item.Qty + "</td>"
+                                        + '<td style="text-align: center;">' + item.Price + "</td>"
+                                        + '<td style="text-align: center;">' + item.Total + "</td>" + "</tr>"));
+                            });
+                        }
+                        $('#formCrud').css('display', 'block');
+                        $('#loadingPanel').css('display', 'none');
+                    }
+                    else {
+                        console.log("Invoice cannot find");
+                        toastr.error("Invoice cannot find");
+                        $('#formCrud').css('display', 'none');
+                        $('#loadingPanel').css('display', 'none');
+                    }
+                }
+
+            });
+        }
+
+        function getSales() {
+            var selectedValue = $('#typeSales').val();
+            //$('#typeSales').val(selectedValue).trigger('change.select2');
+            console.log(selectedValue);
+        }
+        function getPayment() {
+            var selectedValue = $('#typePayment').val();
+            //$('#typeSales').val(selectedValue).trigger('change.select2');
+            console.log(selectedValue);
+        }
+        function getCourier() {
+            var selectedValue = $('#typeCourier').val();
+            //$('#typeSales').val(selectedValue).trigger('change.select2');
+            console.log(selectedValue);
+        }
+
+        function showDeleteModal(){
+            $('#confirmModal').modal("show");
+        }
+
+        function closeModal(){
+            $('#confirmModal').modal("hide");
+        }
+        function deleteChoosen(){
+            $('#loadingPanel').css('display', 'block');
+            var dataHeader = {
+                InvoiceNo: $('#txtInvNo').val()
+            };
+            $.ajax({
+                type: "DELETE",
+                url: "/Invoice/DeleteInvoice",
+                data: dataHeader,
+                success: function (respon) {
+                    
+                    if (respon.is_ok) {
+                        toastr.error("Invoice deleted success");
+                        $('#loadingPanel').css('display', 'none');
+                    }
+                    else {
+                       
+                        toastr.error("Invoice deleted failed");
+                        $('#formCrud').css('display', 'none');
+                        showCloseModal();
+                        closeModal();
+                        $('#loadingPanel').css('display', 'none');
+                    }
+                }
+
+            });
+        }
+    </script>
