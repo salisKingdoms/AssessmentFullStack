@@ -1,0 +1,221 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Login Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    //var dataUser = ViewBag.Message;
+}
+<div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+        <div class="container-fluid" id="formInput">
+            <div class="card shadow mb-4">
+                <div class="card-header ">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        Master Employee
+                        <a id="btClose" class="btn btn-sm btn-danger" style="float:right" onclick="CloseForm()"> (x)Close</a>
+                    </h6>
+                </div>
+
+                <div class="card-body">
+                    <div class="form-row">
+                        <label class="col-md-2 control-label">ID* </label>&nbsp;
+                        <span class="fieldrequired-new"></span>&nbsp;&nbsp;
+                        <div class="col-md-4">
+
+                            <input type="text" class="form-control" id="employeeID" maxlength="25" readonly="readonly" value="" />
+                            <p id="lblID" style="display: none; color:red;" />
+                        </div>
+                    </div>
+                    <br id="br1" />
+                    <div class="form-row">
+                        <label class="col-md-2 control-label">Name* </label>&nbsp;
+                        <span class="fieldrequired-new"></span>&nbsp;&nbsp;
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="employeeName" maxlength="25" />
+                            <p id="lblName" style="display: none; color:red;" />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-row">
+                        <label class="col-md-2 control-label">NIK* </label>&nbsp;
+                        <span class="fieldrequired-new"></span>&nbsp;&nbsp;
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="employeeNIK" maxlength="25" readonly="readonly" value="" />
+                            <p id="lblNIK" style="display: none; color:red;" />
+                        </div>
+                    </div>
+
+                    <br />
+                    <div class="form-row">
+                        <label class="col-md-2 control-label">Birth Date  </label>
+                        <span class="fieldrequired-new"></span>&nbsp;&nbsp;
+                        <div class="input-group date col-md-4" id="datePickerFrom" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" id="validFrom" data-target="#datePickerFrom" />
+                            <div class="input-group-append" data-target="#datePickerFrom" data-toggle="datetimepicker">
+                                <div id="dvValidFrom" class="input-group-text btn btn-info"><em class="fa fa-calendar"></em></div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-row">
+                        <label class="col-md-2 control-label">Sallary* </label>&nbsp;
+                        <span class="fieldrequired-new"></span>&nbsp;&nbsp;
+                        <div class="col-md-4">
+                            <input type="number" class="form-control" id="sallary" maxlength="25" />
+                            <p id="lblsallary" style="display: none; color:red;" />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-row">
+                        <label class="col-md-2 control-label">Address </label>&nbsp;
+                        <span class="fieldrequired-new"></span>&nbsp;&nbsp;
+                        <div class="col-md-4">
+                            <textarea id="address" class="w-100"></textarea>
+                            <p id="lbladdress" style="display: none; color:red;" />
+                        </div>
+                    </div>
+                    <br /><br />
+                    <div class="form-row bg-white border-0 float-right">
+                        <button class="btn btn-sm btn-success" style="margin-left:4%" id="btnSave" onclick="SaveData()">Save</button>
+                    </div>
+
+
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="container-fluid" id="formList">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Master User</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div id="alert_container" runat="server">
+                            <asp:Label ID="lblError" runat="server" Text=""></asp:Label>
+                        </div>
+                    </div>
+
+                    <div class="form-horizontal">
+                        <div class="form-group row" runat="server">
+                            <label class="col-md-2 control-label">User Code</label>
+                            <div class="input-group date col-md-3" data-target-input="nearest">
+                                <input type="text" class="form-control" id="userCodeSearch" onkeyup="KeyPressEnterList()" />
+                            </div>
+
+                            <label class="col-md-2 control-label">User Name</label>
+                            <div class="input-group date col-md-3" data-target-input="nearest">
+                                <input type="text" class="form-control" id="userNameSearch" onkeyup="KeyPressEnterList()" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group row" runat="server">
+                            <label class="col-md-2 control-label">Type</label>
+                            <div class="col-md-3">
+                                <select id="typeSelectList" class="form-control sprites-arrow-down" name="TaskFitToWork">
+                                    @*onchange="getTypeList();" value*@
+                                    <option id="val" value="">- All - </option>
+                                    <option id="val" value="1">Employee</option>
+                                    <option id="val" value="2">Vendor</option>
+                                </select>
+                                <br />
+                                @*<input type="text" class="form-control " style="width:72%" id="typeSearch" onkeypress="KeyPressEnterList()" /><br />*@
+                                <button class="btn btn-sm btn-info " onclick="searchDataListUser()"><em class="fa fa-search"></em> Search</button>&nbsp;
+                                <button id="btnReset" class="btn btn-sm btn-warning" onclick="resetFormList()"><em class="fas fa-times"></em> Reset</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <span class="m-0 font-weight-bold text-primary">Data User</span>
+                </div>
+                <div class="card-body">
+                    <a id="btnAdd" class="btn btn-sm btn-success" onclick="onAddNew()" style="display:none"><em class="fa fa-plus"></em> Add New</a>
+                    <br />
+                    <div class="table-responsive ">
+                        <table class="table table-bordered " id="listData" width="100%" cellspacing="0">
+                            <caption>Data RoleList</caption>
+                            <thead>
+                                <tr>
+                                    <th class="headerBg" style="width:3%">
+                                        Action
+                                    </th>
+                                    <th class="headerBg" style="width:5%">
+                                        User Code
+                                    </th>
+                                    <th class="headerBg" style="width:7%">
+                                        User Name
+                                    </th>
+                                    <th class="headerBg" style="width:5%">
+                                        Type
+                                    </th>
+                                    <th class="headerBg" style="width:5%">
+                                        Email
+                                    </th>
+                                    <th class="headerBg" style="width:7%">
+                                        Job Title Name
+                                    </th>
+                                    <th class="headerBg" style="width:3%">
+                                        Position
+                                    </th>
+                                    <th class="headerBg" style="width:5%">
+                                        Company Code
+                                    </th>
+                                    <th class="headerBg" style="width:5%">
+                                        Company Name
+                                    </th>
+                                    <th class="headerBg" style="width:10%">
+                                        Family Function Code
+                                    </th>
+                                    <th class="headerBg" style="width:10%">
+                                        Family Function Name
+                                    </th>
+                                    <th class="headerBg" style="width:6%">
+                                        Function Code
+                                    </th>
+                                    <th class="headerBg" style="width:6%">
+                                        Function Name
+                                    </th>
+                                    <th class="headerBg" style="width:5%">
+                                        Location Name
+                                    </th>
+                                    <th class="headerBg" style="width:3%">
+                                        Valid From
+                                    </th>
+                                    <th class="headerBg" style="width:3%">
+                                        Valid To
+                                    </th>
+                                    <th class="headerBg" style="width:3%">
+                                        Created At
+                                    </th>
+                                    <th class="headerBg" style="width:3%">
+                                        Updated At
+                                    </th>
+                                    <th class="headerBg" style="width:3%">
+                                        Created By
+                                    </th>
+                                    <th class="headerBg" style="width:3%">
+                                        Updated By
+                                    </th>
+
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Theme/js/MaintainUser/MaintainUser.js"></script>
+@*<script type="text/javascript">
+
+    </script>*@
