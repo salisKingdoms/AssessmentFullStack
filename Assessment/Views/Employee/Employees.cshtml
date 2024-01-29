@@ -13,71 +13,78 @@
                 <div class="card-header ">
                     <h6 class="m-0 font-weight-bold text-primary">
                         Master Employee
-                        <a id="btClose" class="btn btn-sm btn-danger" style="float:right" onclick="CloseForm()"> (x)Close</a>
                     </h6>
                 </div>
 
                 <div class="card-body">
-                    <div class="form-row">
-                        <label class="col-md-2 control-label">ID* </label>&nbsp;
-                        <span class="fieldrequired-new"></span>&nbsp;&nbsp;
-                        <div class="col-md-4">
 
-                            <input type="text" class="form-control" id="employeeID" maxlength="25" readonly="readonly" value="" />
-                            <p id="lblID" style="display: none; color:red;" />
-                        </div>
-                    </div>
-                    <br id="br1" />
-                    <div class="form-row">
-                        <label class="col-md-2 control-label">Name* </label>&nbsp;
-                        <span class="fieldrequired-new"></span>&nbsp;&nbsp;
-                        <div class="col-md-4">
-                            <input type="text" class="form-control" id="employeeName" maxlength="25" />
-                            <p id="lblName" style="display: none; color:red;" />
-                        </div>
-                    </div>
-                    <br />
-                    <div class="form-row">
-                        <label class="col-md-2 control-label">NIK* </label>&nbsp;
-                        <span class="fieldrequired-new"></span>&nbsp;&nbsp;
-                        <div class="col-md-4">
-                            <input type="text" class="form-control" id="employeeNIK" maxlength="25" readonly="readonly" value="" />
-                            <p id="lblNIK" style="display: none; color:red;" />
-                        </div>
-                    </div>
-
-                    <br />
-                    <div class="form-row">
-                        <label class="col-md-2 control-label">Birth Date  </label>
-                        <span class="fieldrequired-new"></span>&nbsp;&nbsp;
-                        <div class="input-group date col-md-4" id="datePickerFrom" data-target-input="nearest">
-                            <input type="text" class="form-control datetimepicker-input" id="validFrom" data-target="#datePickerFrom" />
-                            <div class="input-group-append" data-target="#datePickerFrom" data-toggle="datetimepicker">
-                                <div id="dvValidFrom" class="input-group-text btn btn-info"><em class="fa fa-calendar"></em></div>
+                    <div class="form-horizontal">
+                        <div class="form-group row" runat="server">
+                            <label class="col-md-2 control-label">ID* </label>
+                            <div class="input-group col-md-6" data-target-input="nearest">
+                                <input type="text" class="form-control" id="employeeID" disabled />
                             </div>
                         </div>
                     </div>
-                    <br />
-                    <div class="form-row">
-                        <label class="col-md-2 control-label">Sallary* </label>&nbsp;
-                        <span class="fieldrequired-new"></span>&nbsp;&nbsp;
-                        <div class="col-md-4">
-                            <input type="number" class="form-control" id="sallary" maxlength="25" />
-                            <p id="lblsallary" style="display: none; color:red;" />
+
+                    <div class="form-horizontal">
+                        <div class="form-group row" runat="server">
+                            <label class="col-md-2 control-label">Name* </label>
+                            <div class="input-group col-md-6" data-target-input="nearest">
+                                <input type="text" class="form-control" id="employeeName" />
+                            </div>
                         </div>
                     </div>
-                    <br />
-                    <div class="form-row">
-                        <label class="col-md-2 control-label">Address </label>&nbsp;
-                        <span class="fieldrequired-new"></span>&nbsp;&nbsp;
-                        <div class="col-md-4">
-                            <textarea id="address" class="w-100"></textarea>
-                            <p id="lbladdress" style="display: none; color:red;" />
+
+                    <div class="form-horizontal">
+                        <div class="form-group row" runat="server">
+                            <label class="col-md-2 control-label">NIK* </label>
+                            <div class="input-group col-md-6" data-target-input="nearest">
+                                <input type="text" class="form-control" id="employeeNIK" />
+                            </div>
                         </div>
                     </div>
-                    <br /><br />
-                    <div class="form-row bg-white border-0 float-right">
-                        <button class="btn btn-sm btn-success" style="margin-left:4%" id="btnSave" onclick="SaveData()">Save</button>
+
+                    <div class="form-horizontal">
+                        <div class="form-group row" runat="server">
+                            <label class="col-md-2 control-label">Birth Date<span class="badge field-required">*</span></label>
+                            <div class="input-group date col-md-5" id="datePickerTo" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input" id="birthDate" data-target="#datePickerTo" />
+                                <div class="input-group-append" data-target="#datePickerTo" data-toggle="datetimepicker">
+                                    <div id="dvbirthDate" class="input-group-text btn btn-info"><em class="fa fa-calendar"></em></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-horizontal">
+                        <div class="form-group row" runat="server">
+                            <label class="col-md-2 control-label">Sallary* </label>
+                            <div class="input-group col-md-6" data-target-input="nearest">
+                                Rp&nbsp;&nbsp;<input type="number" class="form-control" id="sallary" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-horizontal">
+                        <div class="form-group row" runat="server">
+                            <label class="col-md-2 control-label">Address </label>
+                            <div class="input-group col-md-6" data-target-input="nearest">
+                                <textarea id="address" class="w-100"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-horizontal">
+                        <div class="d-flex justify-content-center">
+                            <div class="row" runat="server">
+                                <button id="btnSubmit" class="btn btn-success" onclick="saveData('Save')"><em class="fa fa-paper-plane"></em> Save</button>
+                                &nbsp;
+                                <button id="btnClose" class="btn btn-dark" onclick="getData()"><em class="fa fa-times-circle"></em> Close</button>
+                                &nbsp;
+                                <button id="btnDelet" class="btn btn-danger" onclick="updateData()"><em class="fa fa-trash"></em> Delete</button>
+                            </div>
+                        </div>
                     </div>
 
 
@@ -90,7 +97,7 @@
         <div class="container-fluid" id="formList">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Master User</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Master Employee</h6>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -114,15 +121,9 @@
                     </div>
                     <div class="form-horizontal">
                         <div class="form-group row" runat="server">
-                            <label class="col-md-2 control-label">Type</label>
+                            <label class="col-md-2 control-label"></label>
                             <div class="col-md-3">
-                                <select id="typeSelectList" class="form-control sprites-arrow-down" name="TaskFitToWork">
-                                    @*onchange="getTypeList();" value*@
-                                    <option id="val" value="">- All - </option>
-                                    <option id="val" value="1">Employee</option>
-                                    <option id="val" value="2">Vendor</option>
-                                </select>
-                                <br />
+
                                 @*<input type="text" class="form-control " style="width:72%" id="typeSearch" onkeypress="KeyPressEnterList()" /><br />*@
                                 <button class="btn btn-sm btn-info " onclick="searchDataListUser()"><em class="fa fa-search"></em> Search</button>&nbsp;
                                 <button id="btnReset" class="btn btn-sm btn-warning" onclick="resetFormList()"><em class="fas fa-times"></em> Reset</button>
@@ -215,7 +216,110 @@
         </div>
     </div>
 </div>
-<script src="~/Theme/js/MaintainUser/MaintainUser.js"></script>
-@*<script type="text/javascript">
+<script>
+    $(document).ready(function () {
 
-    </script>*@
+        $('#datePickerTo').datetimepicker
+            ({
+                format: 'YYYY-MM-DD'
+            });
+        var table = $('#listData').DataTable();
+        $('#employeeNIK').css('disabled', 'false');
+
+    });
+
+    function saveData() {
+
+        var dataHeader = {
+            name: $('#employeeName').val(),
+            birth_date: $('#birthDate').val(),
+            address: $('#address').val(),
+            sallary: parseFloat($('#sallary').val()),
+            nik: $('#employeeNIK').val(),
+        };
+        $.ajax({
+            type: "POST",
+            url: "/Employee/SubmitEmployee",
+            data: dataHeader,
+            success: function (respon) {
+                if (respon.is_ok) {
+
+                    toastr.success("Employee success to submitted");
+                    setTimeout(() => {
+                        $('#formCrud').css('display', 'none');
+                    }, 500);
+                }
+                else {
+                    console.log("Invoice failed to submitted");
+                    toastr.error(respon.messageUI);
+
+                }
+            }
+
+        });
+    }
+
+    function getData() {
+
+        var dataHeader = {
+            id: parseInt(20240100001)//$('#employeeID').val()
+        };
+        $.ajax({
+            type: "GET",
+            url: "/Employee/GetEmployeeById",
+            data: dataHeader,
+            success: function (respon) {
+                var dataresp = JSON.parse(respon);
+                if (dataresp.is_ok) {
+                    $('#employeeID').val(dataresp.ID);
+                    $('#employeeName').val(dataresp.name);
+                    $('#birthDate').val(moment(dataresp.birth_date).format('YYYY-MM-DD'));
+                    $('#employeeNIK').val(dataresp.nik);
+                    $('#sallary').val(dataresp.sallary);
+                    $('#address').val(dataresp.address);
+                    $('#employeeNIK').prop('disabled', true);;
+
+                }
+                else {
+                    console.log("employee not found");
+                    toastr.error(dataresp.messageUI);
+
+                }
+            }
+
+        });
+    }
+
+    function updateData() {
+
+        var dataHeader = {
+            id: 20240100001,
+            name: $('#employeeName').val(),
+            birth_date: $('#birthDate').val(),
+            address: $('#address').val(),
+            sallary: parseFloat($('#sallary').val()),
+            nik: $('#employeeNIK').val(),
+        };
+        $.ajax({
+            type: "PUT",
+            url: "/Employee/EditEmployee",
+            data: dataHeader,
+            success: function (respon) {
+                if (respon.is_ok) {
+
+                    toastr.success("Employee success to changes");
+                    setTimeout(() => {
+                        $('#formCrud').css('display', 'none');
+                    }, 500);
+                }
+                else {
+                    console.log("Invoice failed to submitted");
+                    toastr.error(respon.messageUI);
+
+                }
+            }
+
+        });
+    }
+
+</script>
