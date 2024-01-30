@@ -1,6 +1,7 @@
 ﻿using Assessment.Data.DataAccess;
 using Assessment.Data.dto;
 using Assessment.Models;
+using System.Xml.Linq;
 
 namespace Assessment.Data.Repository
 {
@@ -106,14 +107,14 @@ namespace Assessment.Data.Repository
 
             if (!string.IsNullOrEmpty(name))
             {
-                query += " where name like ('%'@emplooyename'%')";
+                query += " where name like (@emplooyename)";
             }
             if (id>0)
             {
                 query += " where id=@id";
             }
             var param = new Dictionary<string, object> {
-                    { "emplooyename", name },
+                    { "emplooyename", "%"+name+"%" },
                     { "id", id }
                     };
             return await _dataAccess.GetData<msemployee, dynamic>(query, param);
@@ -131,6 +132,59 @@ namespace Assessment.Data.Repository
                     };
             return await _dataAccess.GetData<string, dynamic>(query, param);
         }
+        public List<ParamRespEmployeeList> GetListEmployeesforGrid(ParamSearchEmployee filter)
+        {
+            var data = GetListEmployeesGrid(filter).Result.ToList();
+            return data;
+        }
+        private async Task<IEnumerable<ParamRespEmployeeList>> GetListEmployeesGrid(ParamSearchEmployee filter)
+        {
+            string query = @"select * from(select ROW_NUMBER() OVER (ORDER BY id) AS RowNum,
+                                count(id) OVER() as totalRecord,* from ms_employee";
+            string orderby =  (string.IsNullOrEmpty(filter.orderBy) ? " order by id asc" : (" order by " + filter.orderBy + " "+ filter.sortBy));
+            if (!string.IsNullOrEmpty(filter.name))
+            {
+                query += " where name like (@emplooyename)";
+            }
+            if (filter.id > 0)
+            {
+                query += " where id=@id";
+            }
+            
+            query += @")temp
+                        where temp.RowNum >=@offset 
+	                    AND RowNum < @offset + @limit ";
+            query += orderby;
+            var param = new Dictionary<string, object> {
+                    { "emplooyename", "%"+filter.name+"%" },
+                    { "id", filter.id },
+                    { "sortby", filter.sortBy},
+                    { "orderby", filter.orderBy },
+                    { "offset", filter.page-1},
+                    { "limit", filter.size}
+                    };
+            return await _dataAccess.GetData<ParamRespEmployeeList, dynamic>(query, param);
+        }
 
+        public async Task<bool> DeleteEmployee(long id)
+        {
+            bool result = false;
+            try
+            {
+                string query = string.Empty;
+                var param = new Dictionary<string, object> {
+                    {"empid", id }
+                    };
+                query = @"delete from  ms_employee where ID=@empid";
+                await _dataAccess.SaveData(query, param);
+                result = true;
+
+            }
+            catch (Exception ex)
+            {
+                result = false;
+            }
+            return result;
+        }
     }
 }
