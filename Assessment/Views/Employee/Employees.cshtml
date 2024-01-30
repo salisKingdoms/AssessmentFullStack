@@ -1,0 +1,387 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Login Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    //var dataUser = ViewBag.Message;
+}
+<div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+        <div class="container-fluid" id="formCrud" style="display:none">
+            <div class="card shadow mb-4">
+                <div class="card-header ">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        Master Employee
+                    </h6>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="form-horizontal">
+                        <div class="form-group row" runat="server">
+                            <label class="col-md-2 control-label">ID* </label>
+                            <div class="input-group col-md-6" data-target-input="nearest">
+                                <input type="text" class="form-control" id="employeeID" disabled />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-horizontal">
+                        <div class="form-group row" runat="server">
+                            <label class="col-md-2 control-label">Name* </label>
+                            <div class="input-group col-md-6" data-target-input="nearest">
+                                <input type="text" class="form-control" id="employeeName" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-horizontal">
+                        <div class="form-group row" runat="server">
+                            <label class="col-md-2 control-label">NIK* </label>
+                            <div class="input-group col-md-6" data-target-input="nearest">
+                                <input type="text" class="form-control" id="employeeNIK" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-horizontal">
+                        <div class="form-group row" runat="server">
+                            <label class="col-md-2 control-label">Birth Date<span class="badge field-required">*</span></label>
+                            <div class="input-group date col-md-5" id="datePickerTo" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input" id="birthDate" data-target="#datePickerTo" />
+                                <div class="input-group-append" data-target="#datePickerTo" data-toggle="datetimepicker">
+                                    <div id="dvbirthDate" class="input-group-text btn btn-info"><em class="fa fa-calendar"></em></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-horizontal">
+                        <div class="form-group row" runat="server">
+                            <label class="col-md-2 control-label">Sallary* </label>
+                            <div class="input-group col-md-6" data-target-input="nearest">
+                                Rp&nbsp;&nbsp;<input type="number" class="form-control" id="sallary" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-horizontal">
+                        <div class="form-group row" runat="server">
+                            <label class="col-md-2 control-label">Address </label>
+                            <div class="input-group col-md-6" data-target-input="nearest">
+                                <textarea id="address" class="w-100"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-horizontal">
+                        <div class="d-flex justify-content-center">
+                            <div class="row" runat="server">
+                                <button id="btnSubmit" class="btn btn-success" onclick="saveData('Save')"><em class="fa fa-paper-plane"></em> Save</button>
+                                &nbsp;
+                                <button id="btnClose" class="btn btn-dark" onclick="onClose()"><em class="fa fa-times-circle"></em> Close</button>
+                               @* &nbsp;
+                                <button id="btnDelet" class="btn btn-danger" onclick="deleteData()"><em class="fa fa-trash"></em> Delete</button>*@
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="container-fluid" id="formList">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Master Employee</h6>
+                </div>
+                
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <span class="m-0 font-weight-bold text-primary">Data Employee</span>
+                </div>
+                <div class="card-body">
+                    <a id="btnAdd" class="btn btn-sm btn-success" onclick="onAddNew()" ><em class="fa fa-plus"></em> Add New</a>
+                    <br /><br/>
+                    <div class="table-responsive ">
+                        <table class="table table-bordered " id="listData" width="100%" cellspacing="0">
+                            <caption>Data Employee</caption>
+                            <thead>
+                                <tr>
+                                    <th class="headerBg" style="width:3%">
+                                        Action
+                                    </th>
+                                    <th class="headerBg" style="width:5%">
+                                        Name
+                                    </th>
+                                    <th class="headerBg" style="width:7%">
+                                        Birth Date
+                                    </th>
+                                    <th class="headerBg" style="width:5%">
+                                        Sallary
+                                    </th>
+                                    <th class="headerBg" style="width:5%">
+                                        NIK
+                                    </th>
+                                    
+
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*Modal Delete Confirmation*@
+        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Are you sure to Delete?</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">Select "Delete" below if you are sure to delete your transaction.</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal" onclick="closeModal()">No</button>
+                        <a class="btn btn-primary" onclick="deleteChoosen()">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of Main Content -->
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+
+        $('#datePickerTo').datetimepicker
+            ({
+                format: 'YYYY-MM-DD'
+            });
+        var table = $('#listData').DataTable();
+        $('#employeeNIK').css('disabled', 'false');
+        searchDataListEmployee();
+    });
+
+    function saveData() {
+        if ($('#employeeID').val()==""||parseInt($('#employeeID').val()) == 0) {
+            var dataHeader = {
+                name: $('#employeeName').val(),
+                birth_date: $('#birthDate').val(),
+                address: $('#address').val(),
+                sallary: parseFloat($('#sallary').val()),
+                nik: $('#employeeNIK').val(),
+            };
+            $.ajax({
+                type: "POST",
+                url: "/Employee/SubmitEmployee",
+                data: dataHeader,
+                success: function (respon) {
+                    if (respon.is_ok) {
+
+                        toastr.success("Employee success to submitted");
+                        setTimeout(() => {
+                            $('#formCrud').css('display', 'none');
+                            $('#formList').css('display', 'block');
+                            searchDataListEmployee();
+                        }, 500);
+                    }
+                    else {
+                        console.log("Invoice failed to submitted");
+                        toastr.error(respon.messageUI);
+
+                    }
+                }
+
+            });
+        }
+        else{
+            updateData();
+        }
+    }
+
+    function getData() {
+        $('#loadingPanel').css('display', 'block');
+        var dataHeader = {
+            id: parseInt($('#employeeID').val())
+        };
+        $.ajax({
+            type: "GET",
+            url: "/Employee/GetEmployeeById",
+            data: dataHeader,
+            success: function (respon) {
+                var dataresp = JSON.parse(respon);
+                if (dataresp.is_ok) {
+                    $('#employeeID').val(dataresp.ID);
+                    $('#employeeName').val(dataresp.name);
+                    $('#birthDate').val(moment(dataresp.birth_date).format('YYYY-MM-DD'));
+                    $('#employeeNIK').val(dataresp.nik);
+                    $('#sallary').val(dataresp.sallary);
+                    $('#address').val(dataresp.address);
+                    $('#employeeNIK').prop('disabled', true);;
+                    $('#loadingPanel').css('display', 'none');
+                }
+                else {
+                    console.log("employee not found");
+                    toastr.error(dataresp.messageUI);
+                    $('#loadingPanel').css('display', 'none');
+                }
+            }
+
+        });
+    }
+
+    function updateData() {
+
+        var dataHeader = {
+            id: parseInt($('#employeeID').val()),
+            name: $('#employeeName').val(),
+            birth_date: $('#birthDate').val(),
+            address: $('#address').val(),
+            sallary: parseFloat($('#sallary').val()),
+            nik: $('#employeeNIK').val(),
+        };
+        $.ajax({
+            type: "PUT",
+            url: "/Employee/EditEmployee",
+            data: dataHeader,
+            success: function (respon) {
+                if (respon.is_ok) {
+
+                    toastr.success("Employee success to changes");
+                    setTimeout(() => {
+                        $('#formCrud').css('display', 'none');
+                        $('#formList').css('display', 'block');
+                        searchDataListEmployee();
+                    }, 500);
+                }
+                else {
+                    console.log("Invoice failed to submitted");
+                    toastr.error(respon.messageUI);
+
+                }
+            }
+
+        });
+    }
+
+    function editDetail(obj){
+       // $('#btnDelet').css('display', 'block');
+        $('#formCrud').css('display', 'block');
+        $('#formList').css('display', 'none');
+        var columnValue = $(obj).closest('tr').find('td');
+        var Id = parseInt($(obj).attr('id'));
+        $('#employeeID').val(Id);
+        getData();
+    }
+
+    function deleteDetail(obj) {
+        $("#confirmModal").modal("show");
+        var columnValue = $(obj).closest('tr').find('td');
+        var Id = parseInt($(obj).attr('id'));
+        $('#employeeID').val(Id);
+    }
+
+    
+    function deleteChoosen(){
+        var dataHeader = {
+            id: parseInt($('#employeeID').val()),
+
+        };
+        $.ajax({
+            type: "DELETE",
+            url: "/Employee/DeleteEmployee",
+            data: dataHeader,
+            success: function (respon) {
+                if (respon.is_ok) {
+
+                    toastr.success("Employee success to delete");
+                    setTimeout(() => {
+                        $('#formCrud').css('display', 'none');
+                    }, 500);
+                }
+                else {
+
+                    toastr.success("Employee success to delete");
+
+                }
+                searchDataListEmployee();
+                $("#confirmModal").modal("hide");
+            }
+             
+        });
+    }
+
+    function onAddNew(){
+        
+        $('#formCrud').css('display', 'block');
+        Reset();
+        $('#formList').css('display', 'none');
+       // $('#btnDelet').css('display', 'none');
+    }
+
+    function onClose(){
+        $('#formList').css('display', 'block');
+        $('#formCrud').css('display', 'none');
+        Reset();
+    }
+
+    function searchDataListEmployee() {
+
+        var paramData = {
+            name: $('#employeeName').val()
+        };
+
+        $('#listData').css('width', '100%');
+        $('#listData').DataTable().destroy();
+        additionalGridConfig = {
+            isPaging: true,
+            scrollY: "60vh",
+            isSearch: true
+        }
+        return _fw_grid_web_method('listData', "GetEmployeeList", paramData,
+            [
+
+                {
+                    "orderable": "false", "bSortable": "false",
+                    "data": "ID", "name": "-Action-", "targets": "1",
+                    "render": function (data, type, row) {
+                        var html = "<div class='text-center'>" +
+                            "<button class='btn btn-sm btn-success'  id=" + row.ID + " height='10' type='button' data-toggle='tooltip' data-placement='top' title='Detail Data' name='btnDetail' onclick=editDetail(this); ><em class='fa fa-edit'></em></button>&nbsp;" +
+                            "<button class='btn btn-sm btn-danger'  id=" + row.ID + " height='10' type='button' data-toggle='tooltip' data-placement='top' title='Delete Data' name='btnDeleted' onclick=deleteDetail(this); ><em class='fa fa-trash'></em></button>"
+                        "</div>";
+                        return html;
+
+                    }
+                },
+                { "data": "name", "name": "Name" },
+                { "data": "birth_date", "name": "Birth Date" },
+                { "data": "sallary", "name": "Sallary" },
+                { "data": "nik", "name": "NIK" }
+
+            ], function (err) {
+            },
+            additionalGridConfig);
+    }
+
+    function Reset(){
+        $('#employeeID').val("");
+        $('#employeeName').val("");
+        $('#birthDate').val("");
+        $('#employeeNIK').val("");
+        $('#sallary').val("");
+        $('#address').val("");
+        $('#employeeNIK').prop('disabled', false);
+        //$('#txtInvNo').value = "";
+    }
+
+</script>

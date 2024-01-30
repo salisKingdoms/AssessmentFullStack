@@ -54,6 +54,7 @@ namespace Assessment
             //services.AddScoped<ClsGlobal>();
             services.AddScoped<IsqlDataAccess, sqlDataAccess>();
             services.AddScoped<InvoiceRepo, InvoiceRepo>();
+            services.AddScoped<EmployeeRepo, EmployeeRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
