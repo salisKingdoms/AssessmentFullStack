@@ -1,0 +1,94 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "CC Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    //var dataUser = ViewBag.Message;
+}
+<div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+        <div class="container-fluid" id="formCrud" >
+            <div class="card shadow mb-4">
+                <div class="card-header ">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        Credit Card
+                    </h6>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="form-horizontal">
+                        <div class="form-group row" runat="server">
+                            <label class="col-md-2 control-label">Type Number<span class="badge field-required">*</span></label>
+                            <div class="input-group col-md-5" id="txtCCNo" data-target-input="nearest">
+                                <input type="text" class="form-control" id="txtCCNo" placeholder="Enter your text here" onkeyup="ChangeImg(this)"/>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><img id="imgBank" src="~/Theme/img/bri.png" alt="Image" style="height: 25px;"></span>
+                                </div>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><img id="imgVisa" src="~/Theme/img/mastercard.png" alt="Image" style="height: 25px;"></span>
+                                </div>
+                               
+                              
+                            </div>
+                        </div>
+                    </div>
+
+                    
+
+
+                </div>
+            </div>
+
+        </div>
+
+       
+        
+    </div>
+</div>
+<script>
+    function ChangeImg(obj){
+        var dataHeader = {
+            ccNo:obj.value,
+
+        };
+        $.ajax({
+            type: "GET",
+            url: "/CreditCard/GetBankTypeByNo",
+            data: dataHeader,
+            success: function (respon) {
+                var dataresp = JSON.parse(respon);
+                if (dataresp.is_ok) {
+                    var typeCC = dataresp.cc_type;
+                    if (typeCC == "VISA")
+                    {
+                        $('#imgVisa').attr('src', 'https://localhost:7282/Theme/img/visa_cc.png');
+                    }
+                    
+                    if (dataresp.bank.toLowerCase().indexOf("mandiri") !== -1) {
+                        $('#imgBank').attr('src', 'https://localhost:7282/Theme/img/mandiri.png');
+                    }
+                    if (dataresp.bank.toLowerCase().indexOf("danamon") !== -1) {
+                        $('#imgBank').attr('src', 'https://localhost:7282/Theme/img/danamon.png');
+                    }
+                    if (dataresp.bank.toLowerCase().indexOf("permata") !== -1) {
+                        $('#imgBank').attr('src', 'https://localhost:7282/Theme/img/permata.png');
+                    }
+                    if (dataresp.bank.toLowerCase().indexOf("standard") !== -1) {
+                        $('#imgBank').attr('src', 'https://localhost:7282/Theme/img/standardchar.png');
+                    }
+                    if (dataresp.bank.toLowerCase().indexOf("bukopin") !== -1) {
+                        $('#imgBank').attr('src', 'https://localhost:7282/Theme/img/bukopin.png');
+                    }
+                }
+                else {
+                    console.log("employee not found");
+                    toastr.error(dataresp.messageUI);
+                    $('#loadingPanel').css('display', 'none');
+                }
+            }
+
+        });
+    }
+</script>
