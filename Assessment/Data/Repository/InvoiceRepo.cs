@@ -25,7 +25,7 @@ namespace Assessment.Data.Repository
         private async Task<IEnumerable<msproduct>> GetAllProduct()
         {
             string query = "select * from msproduct";
-            return await _dataAccess.GetData<msproduct, dynamic>(query, new { });
+            return await _dataAccess.GetData<msproduct, dynamic>(query, new { }, true);
         }
         public List<mscourier> GetCourierList()
         {
@@ -35,7 +35,7 @@ namespace Assessment.Data.Repository
         private async Task<IEnumerable<mscourier>> GetAllCourier()
         {
             string query = "select * from mscourier";
-            return await _dataAccess.GetData<mscourier, dynamic>(query, new { });
+            return await _dataAccess.GetData<mscourier, dynamic>(query, new { }, true);
         }
         public List<mspayment> GetPaymentList()
         {
@@ -45,7 +45,7 @@ namespace Assessment.Data.Repository
         private async Task<IEnumerable<mspayment>> GetAllPayments()
         {
             string query = "select * from mspayment";
-            return await _dataAccess.GetData<mspayment, dynamic>(query, new { });
+            return await _dataAccess.GetData<mspayment, dynamic>(query, new { }, true);
         }
         public List<mssales> GetSales()
         {
@@ -55,7 +55,7 @@ namespace Assessment.Data.Repository
         private async Task<IEnumerable<mssales>> GetAllSales()
         {
             string query = "select * from mssales";
-            return await _dataAccess.GetData<mssales, dynamic>(query, new { });
+            return await _dataAccess.GetData<mssales, dynamic>(query, new { }, true);
         }
 
         public async Task<bool> SaveInvoice(ParamSaveInvoice data)
@@ -159,7 +159,7 @@ namespace Assessment.Data.Repository
         private async Task<IEnumerable<trinvoice>> GetLastInvoice()
         {
             string query = "select top 1 * from trinvoice order by InvoiceNo desc";
-            return await _dataAccess.GetData<trinvoice, dynamic>(query, new { });
+            return await _dataAccess.GetData<trinvoice, dynamic>(query, new { }, true);
         }
 
         public async Task<bool> EditInvoice(ParamSaveInvoice data)
@@ -238,7 +238,7 @@ namespace Assessment.Data.Repository
             var param = new Dictionary<string, object> {
                     { "invoiceno", invNo },
                    };
-            return await _dataAccess.GetData<trinvoice, dynamic>(query,param);
+            return await _dataAccess.GetData<trinvoice, dynamic>(query,param, true);
         }
         public trinvoice GetInvoiceHeaderByNo(string invNo)
         {
@@ -253,7 +253,7 @@ namespace Assessment.Data.Repository
             var param = new Dictionary<string, object> {
                     { "invoiceno", invNo },
                    };
-            return await _dataAccess.GetData<RespInvDetail, dynamic>(query, param);
+            return await _dataAccess.GetData<RespInvDetail, dynamic>(query, param, true);
         }
 
         public List<RespInvDetail> GetDetailsInvoiceByInvNo(string invNo)

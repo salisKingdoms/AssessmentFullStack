@@ -25,7 +25,7 @@ namespace Assessment.Data.Repository
             var param = new Dictionary<string, object> {
                     { "prefix", prefix+"%" }
                     };
-            return await _dataAccess.GetData<string, dynamic>(query, param);
+            return await _dataAccess.GetData<string, dynamic>(query, param, true);
         }
 
         public async Task<bool> SaveEmployee(ParamSaveEmployee data)
@@ -117,7 +117,7 @@ namespace Assessment.Data.Repository
                     { "emplooyename", "%"+name+"%" },
                     { "id", id }
                     };
-            return await _dataAccess.GetData<msemployee, dynamic>(query, param);
+            return await _dataAccess.GetData<msemployee, dynamic>(query, param, true);
         }
         public string GetNIKEmployee(string nik)
         {
@@ -130,7 +130,7 @@ namespace Assessment.Data.Repository
             var param = new Dictionary<string, object> {
                     { "NIK", nik }
                     };
-            return await _dataAccess.GetData<string, dynamic>(query, param);
+            return await _dataAccess.GetData<string, dynamic>(query, param, true);
         }
         public List<ParamRespEmployeeList> GetListEmployeesforGrid(ParamSearchEmployee filter)
         {
@@ -163,7 +163,7 @@ namespace Assessment.Data.Repository
                     { "offset", filter.page-1},
                     { "limit", filter.size}
                     };
-            return await _dataAccess.GetData<ParamRespEmployeeList, dynamic>(query, param);
+            return await _dataAccess.GetData<ParamRespEmployeeList, dynamic>(query, param, true);
         }
 
         public async Task<bool> DeleteEmployee(long id)

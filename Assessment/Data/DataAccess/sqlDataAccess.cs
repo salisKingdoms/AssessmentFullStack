@@ -12,16 +12,17 @@ namespace Assessment.Data.DataAccess
     {
         private readonly IConfiguration _configuration;
         string connectionId = "DefaultConnection";
+        string connectionIdEsb = "ConnectionESB";
         public sqlDataAccess(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public async Task<IEnumerable<T>> GetData<T, P>(string spName, P parameters)
+        public async Task<IEnumerable<T>> GetData<T, P>(string spName, P parameters , bool isAssesmentServer)
         {
             try
             {
-                string connectionString = _configuration.GetConnectionString(connectionId);
+                string connectionString = _configuration.GetConnectionString(isAssesmentServer ? connectionId : connectionIdEsb);
                 using (IDbConnection dbConnection = new SqlConnection(connectionString))
                 {
                     return await dbConnection.QueryAsync<T>(spName, parameters, commandType: CommandType.Text);

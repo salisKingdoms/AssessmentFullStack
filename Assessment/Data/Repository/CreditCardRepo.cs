@@ -31,7 +31,7 @@ namespace Assessment.Data.Repository
             var param = new Dictionary<string, object> {
                     { "accNo", accNo+"%" }
                     };
-            return await _dataAccess.GetData<mscreditcard, dynamic>(query, param);
+            return await _dataAccess.GetData<mscreditcard, dynamic>(query, param, false);
         }
     }
 }
